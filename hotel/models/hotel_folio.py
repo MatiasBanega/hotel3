@@ -148,19 +148,18 @@ class HotelFolio(models.Model):
         folio_room_line_obj = self.env["folio.room.line"]
         hotel_room_obj = self.env["hotel.room"]
         for rec in folio_id:
-            if not rec:
-                for room_rec in rec.room_line_ids:
-                    room = hotel_room_obj.search(
-                        [("product_id", "=", room_rec.product_id.id)]
-                    )
-                    room.write({"isroom": False})
-                    vals = {
-                        "room_id": room.id,
-                        "check_in": rec.checkin_date,
-                        "check_out": rec.checkout_date,
-                        "folio_id": rec.id,
-                    }
-                    folio_room_line_obj.create(vals)
+            for room_rec in rec.room_line_ids:
+                room = hotel_room_obj.search(
+                    [("product_id", "=", room_rec.product_id.id)]
+                )
+                room.write({"isroom": False})
+                vals = {
+                    "room_id": room.id,
+                    "check_in": rec.checkin_date,
+                    "check_out": rec.checkout_date,
+                    "folio_id": rec.id,
+                }
+                folio_room_line_obj.create(vals)
 
     @api.model
     def create(self, vals):
@@ -258,10 +257,16 @@ class HotelFolio(models.Model):
         """
         @param self: object pointer
         """
-        if not self.order_id:
-            raise UserError(_("Order id is not available"))
-        self.invoice_ids.button_cancel()
-        return self.order_id.action_cancel()
+        for rec in self:
+            if not rec.order_id:
+                raise UserError(_("Order id is not available"))
+            for product in rec.room_line_ids.filtered(
+                lambda l: l.order_line_id.product_id == product
+            ):
+                rooms = self.env["hotel.room"].search([("product_id", "=", product.id)])
+                rooms.write({"isroom": True, "status": "available"})
+            rec.invoice_ids.button_cancel()
+            return rec.order_id.action_cancel()
 
     def action_confirm(self):
         for order in self.order_id:
@@ -441,14 +446,14 @@ class HotelFolioLine(models.Model):
             uom=self.product_uom.id,
         )
         final_price, rule_id = self.folio_id.pricelist_id.with_context(
-            product_context
+            **product_context
         ).get_product_price_rule(
             self.product_id,
             self.product_uom_qty or 1.0,
             self.folio_id.partner_id,
         )
         base_price, currency_id = self.with_context(
-            product_context
+            **product_context
         )._get_real_price_currency(
             product,
             rule_id,
@@ -460,7 +465,7 @@ class HotelFolioLine(models.Model):
             base_price = (
                 self.env["res.currency"]
                 .browse(currency_id)
-                .with_context(product_context)
+                .with_context(**product_context)
                 .compute(base_price, self.folio_id.pricelist_id.currency_id)
             )
         # negative discounts (= surcharge) are included in the display price
@@ -488,9 +493,8 @@ class HotelFolioLine(models.Model):
         if not self.product_id:
             return
         product_tmpl = self.product_id.product_tmpl_id
-        valid_values = (
-            product_tmpl.valid_product_template_attribute_line_ids.product_template_value_ids
-        )
+        attribute_lines = product_tmpl.valid_product_template_attribute_line_ids
+        valid_values = attribute_lines.product_template_value_ids
         # remove the is_custom values that don't belong to this template
         for pacv in self.product_custom_attribute_value_ids:
             if pacv.custom_product_template_attribute_value_id not in valid_values:
@@ -608,6 +612,7 @@ class HotelServiceLine(models.Model):
     _name = "hotel.service.line"
     _description = "hotel Service line"
 
+    @api.returns("self", lambda value: value.id)
     def copy(self, default=None):
         """
         @param self: object pointer
@@ -735,14 +740,14 @@ class HotelServiceLine(models.Model):
             uom=self.product_uom.id,
         )
         final_price, rule_id = self.folio_id.pricelist_id.with_context(
-            product_context
+            **product_context
         ).get_product_price_rule(
             self.product_id,
             self.product_uom_qty or 1.0,
             self.folio_id.partner_id,
         )
         base_price, currency_id = self.with_context(
-            product_context
+            **product_context
         )._get_real_price_currency(
             product,
             rule_id,
@@ -754,7 +759,7 @@ class HotelServiceLine(models.Model):
             base_price = (
                 self.env["res.currency"]
                 .browse(currency_id)
-                .with_context(product_context)
+                .with_context(**product_context)
                 .compute(base_price, self.folio_id.pricelist_id.currency_id)
             )
         # negative discounts (= surcharge) are included in the display price
@@ -765,9 +770,8 @@ class HotelServiceLine(models.Model):
         if not self.product_id:
             return
         product_tmpl = self.product_id.product_tmpl_id
-        valid_values = (
-            product_tmpl.valid_product_template_attribute_line_ids.product_template_value_ids
-        )
+        attribute_lines = product_tmpl.valid_product_template_attribute_line_ids
+        valid_values = attribute_lines.product_template_value_ids
         # remove the is_custom values that don't belong to this template
         for pacv in self.product_custom_attribute_value_ids:
             if pacv.custom_product_template_attribute_value_id not in valid_values:
