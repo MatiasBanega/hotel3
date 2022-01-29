@@ -9,18 +9,18 @@ class HotelHousekeepingActivities(models.Model):
     _name = "hotel.housekeeping.activities"
     _description = "Housekeeping Activities"
 
-    housekeeping_id = fields.Many2one("hotel.housekeeping", "Reservation")
-    today_date = fields.Date("Today Date")
-    activity_id = fields.Many2one("hotel.activity", "Housekeeping Activity")
-    housekeeper_id = fields.Many2one("res.users", "Housekeeper", required=True)
-    clean_start_time = fields.Datetime("Clean Start Time", required=True)
-    clean_end_time = fields.Datetime("Clean End Time", required=True)
+    housekeeping_id = fields.Many2one("hotel.housekeeping", string="Reservation")
+    today_date = fields.Date()
+    activity_id = fields.Many2one("hotel.activity", string="Housekeeping Activity")
+    housekeeper_id = fields.Many2one("res.users", string="Housekeeper", required=True)
+    clean_start_time = fields.Datetime(required=True)
+    clean_end_time = fields.Datetime(required=True)
     is_dirty = fields.Boolean(
-        "Dirty",
+        string="Dirty",
         help="Checked if the housekeeping activity" "results as Dirty.",
     )
     is_clean = fields.Boolean(
-        "Clean",
+        string="Clean",
         help="Checked if the housekeeping" "activity results as Clean.",
     )
 

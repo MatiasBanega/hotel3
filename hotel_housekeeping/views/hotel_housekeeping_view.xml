@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                         </form>
-                        <tree editable="buttom">
+                        <tree>
                             <field name="activity_id" />
                             <field name="housekeeper_id" />
                             <field name="today_date" />

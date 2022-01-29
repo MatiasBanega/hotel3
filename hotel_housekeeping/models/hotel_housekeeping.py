@@ -23,7 +23,6 @@ class HotelHousekeeping(models.Model):
             ("checkin", "Check-In"),
             ("checkout", "Check-Out"),
         ],
-        "Clean Type",
         required=True,
         states={"done": [("readonly", True)]},
     )
@@ -44,12 +43,11 @@ class HotelHousekeeping(models.Model):
     )
     inspector_id = fields.Many2one(
         "res.users",
-        "Inspector",
+        string="Inspector",
         required=True,
         states={"done": [("readonly", True)]},
     )
     inspect_date_time = fields.Datetime(
-        "Inspect Date Time",
         required=True,
         states={"done": [("readonly", True)]},
     )
@@ -61,7 +59,6 @@ class HotelHousekeeping(models.Model):
             ("bad", "Bad"),
             ("ok", "Ok"),
         ],
-        "Quality",
         states={"done": [("readonly", True)]},
         help="Inspector inspect the room and mark \
                                 as Excellent, Average, Bad, Good or Ok. ",
@@ -74,7 +71,6 @@ class HotelHousekeeping(models.Model):
             ("done", "Done"),
             ("cancel", "Cancelled"),
         ],
-        "State",
         states={"done": [("readonly", True)]},
         required=True,
         readonly=True,

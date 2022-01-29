@@ -7,9 +7,9 @@ class HotelHousekeepingWizard(models.TransientModel):
     _name = "hotel.housekeeping.wizard"
     _description = "Hotel Housekeeping Wizard"
 
-    date_start = fields.Datetime("Activity Start Date", required=True)
-    date_end = fields.Datetime("Activity End Date", required=True)
-    room_id = fields.Many2one("hotel.room", "Room No", required=True)
+    date_start = fields.Datetime(string="Activity Start Date", required=True)
+    date_end = fields.Datetime(string="Activity End Date", required=True)
+    room_id = fields.Many2one("hotel.room", string="Room No", required=True)
 
     def print_report(self):
         data = {

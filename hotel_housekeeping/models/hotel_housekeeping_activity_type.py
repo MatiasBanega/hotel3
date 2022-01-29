@@ -9,12 +9,14 @@ class HotelHousekeepingActivityType(models.Model):
     _name = "hotel.housekeeping.activity.type"
     _description = "Activity Type"
 
-    name = fields.Char("Name", required=True)
-    activity_id = fields.Many2one("hotel.housekeeping.activity.type", "Activity Type")
+    name = fields.Char(required=True)
+    activity_id = fields.Many2one(
+        "hotel.housekeeping.activity.type", string="Activity Type"
+    )
 
     def name_get(self):
         def get_names(cat):
-            """ Return the list [cat.name, cat.activity_id.name, ...] """
+            """Return the list [cat.name, cat.activity_id.name, ...]"""
             res = []
             while cat:
                 res.append(cat.name)

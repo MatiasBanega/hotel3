@@ -16,4 +16,4 @@ class HotelActivity(models.Model):
         ondelete="cascade",
         index=True,
     )
-    categ_id = fields.Many2one("hotel.housekeeping.activity.type", "Category")
+    categ_id = fields.Many2one("hotel.housekeeping.activity.type", string="Category")
