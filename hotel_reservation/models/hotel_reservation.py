@@ -147,7 +147,7 @@ class HotelReservation(models.Model):
     def copy(self):
         ctx = dict(self._context) or {}
         ctx.update({"duplicate": True})
-        return super(HotelReservation, self.with_context(ctx)).copy()
+        return super(HotelReservation, self.with_context(**ctx)).copy()
 
     @api.constrains("reservation_line", "adults", "children")
     def _check_reservation_rooms(self):

@@ -2,7 +2,7 @@
 
 {
     "name": "Hotel Reservation Management",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "Odoo Community Association (OCA), Serpent Consulting \
                 Services Pvt. Ltd., Odoo S.A.",
     "category": "Generic Modules/Hotel Reservation",
@@ -22,10 +22,15 @@
         "report/room_max_report_template.xml",
         "report/hotel_reservation_report_template.xml",
         "report/report_view.xml",
-        "views/assets.xml",
         "wizards/hotel_reservation_wizard.xml",
     ],
-    "qweb": ["static/src/xml/hotel_room_summary.xml"],
+    "assets": {
+        "web.assets_backend": [
+            "/hotel_reservation/static/src/css/room_summary.css",
+            "/hotel_reservation/static/src/js/hotel_room_summary.js",
+        ],
+        "web.assets_qweb": ["/hotel_reservation/static/src/xml/hotel_room_summary.xml"],
+    },
     "external_dependencies": {"python": ["dateutil"]},
     "installable": True,
 }

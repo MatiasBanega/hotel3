@@ -484,9 +484,7 @@ class HotelFolioLine(models.Model):
             taxes = line.product_id.taxes_id.filtered(
                 lambda t: t.company_id == line.env.company
             )
-            line.tax_id = fpos.map_tax(
-                taxes, line.product_id, line.order_id.partner_shipping_id
-            )
+            line.tax_id = fpos.map_tax(taxes)
 
     @api.onchange("product_id")
     def _onchange_product_id(self):
@@ -519,18 +517,11 @@ class HotelFolioLine(models.Model):
             uom=self.product_uom.id,
         )
 
-        vals.update(
-            name=self.order_line_id.get_sale_order_line_multiline_description_sale(
-                product
-            )
-        )
-
+        vals.update(name=self.order_line_id.get_sale_order_line_multiline_description_sale(product))
         self._compute_tax_id()
 
         if self.folio_id.pricelist_id and self.folio_id.partner_id:
-            vals["price_unit"] = self.env[
-                "account.tax"
-            ]._fix_tax_included_price_company(
+            vals["price_unit"] = self.env["account.tax"]._fix_tax_included_price_company(
                 self._get_display_price(product),
                 product.taxes_id,
                 self.tax_id,
@@ -663,11 +654,7 @@ class HotelServiceLine(models.Model):
             taxes = line.product_id.taxes_id.filtered(
                 lambda r: not line.company_id or r.company_id == line.company_id
             )
-            line.tax_id = (
-                fpos.map_tax(taxes, line.product_id, line.folio_id.partner_shipping_id)
-                if fpos
-                else taxes
-            )
+            line.tax_id = (fpos.map_tax(taxes) if fpos else taxes)
 
     def _get_real_price_currency(self, product, rule_id, qty, uom, pricelist_id):
         """Retrieve the price before applying the pricelist
