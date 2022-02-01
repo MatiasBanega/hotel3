@@ -5,7 +5,6 @@ from odoo.exceptions import ValidationError
 
 
 class HotelRestaurantTables(models.Model):
-
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
 
@@ -14,7 +13,6 @@ class HotelRestaurantTables(models.Model):
 
 
 class HotelRestaurantReservation(models.Model):
-
     _name = "hotel.restaurant.reservation"
     _description = "Includes Hotel Restaurant Reservation"
     _rec_name = "reservation_id"
