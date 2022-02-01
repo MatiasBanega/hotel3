@@ -9,8 +9,8 @@ class HotelRestaurantTables(models.Model):
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
 
-    name = fields.Char("Table Number", required=True)
-    capacity = fields.Integer("Capacity")
+    name = fields.Char(string="Table Number", required=True)
+    capacity = fields.Integer()
 
 
 class HotelRestaurantReservation(models.Model):

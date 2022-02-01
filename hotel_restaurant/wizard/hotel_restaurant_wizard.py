@@ -8,8 +8,8 @@ class WizardHotelRestaurant(models.TransientModel):
     _name = "wizard.hotel.restaurant"
     _description = "wizard.hotel.restaurant"
 
-    date_start = fields.Datetime("Start Date", required=True)
-    date_end = fields.Datetime("End Date", required=True)
+    date_start = fields.Datetime(string="Start Date", required=True)
+    date_end = fields.Datetime(string="End Date", required=True)
 
     def print_report(self):
         data = {
@@ -27,9 +27,9 @@ class FolioRestReservation(models.TransientModel):
     _description = "folio.rest.reservation"
     _rec_name = "date_start"
 
-    date_start = fields.Datetime("Start Date")
-    date_end = fields.Datetime("End Date")
-    check = fields.Boolean("With Details")
+    date_start = fields.Datetime(string="Start Date")
+    date_end = fields.Datetime(string="End Date")
+    check = fields.Boolean(string="With Details")
 
     def print_rest_report(self):
         data = {
