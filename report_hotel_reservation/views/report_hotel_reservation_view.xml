@@ -1,4 +1,3 @@
-<!DOCTYPE xml>
 <odoo>
 
     <!-- State By Reservation -->
@@ -6,7 +5,7 @@
         <field name="name">report.hotel.reservation.status.tree</field>
         <field name="model">report.hotel.reservation.status</field>
         <field name="arch" type="xml">
-            <tree string="States By Reservation">
+            <tree>
                 <field name="reservation_no" />
                 <field name="state" />
             </tree>
@@ -67,16 +66,16 @@
     </record>
 
     <!-- Graph view (Bar) of report hotel reservation status -->
-    <record id="view_hotel_reservation_status_graph_bar" model="ir.ui.view">
+    <!--<record id="view_hotel_reservation_status_graph_bar" model="ir.ui.view">
         <field name="name">report.hotel.reservation.status.graph</field>
         <field name="model">report.hotel.reservation.status</field>
         <field name="arch" type="xml">
-            <graph string="States By Reservation" type="bar" orientation="verticle">
+            <graph string="States By Reservation" type="bar" orientation="vertical">
                 <field name="state" />
                 <field name="no_of_reservation" operator="+" />
             </graph>
         </field>
-    </record>
+    </record>-->
 
     <!-- Action of report hotel reservation status -->
     <record

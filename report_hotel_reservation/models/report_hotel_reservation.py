@@ -9,11 +9,10 @@ class ReportHotelReservationStatus(models.Model):
     _description = "Reservation By State"
     _auto = False
 
-    reservation_no = fields.Char("Reservation No", readonly=True)
-    no_of_reservation = fields.Integer("Reservation", readonly=True)
+    reservation_no = fields.Char(readonly=True)
+    no_of_reservation = fields.Integer(string="Reservation", readonly=True)
     state = fields.Selection(
         [("draft", "Draft"), ("confirm", "Confirm"), ("done", "Done")],
-        "State",
         readonly=True,
     )
 
