@@ -26,7 +26,6 @@ odoo.define('sts_pos_booking_system.TableWidget', function(require) {
                                     method: 'is_show_timer',
                                     args: [booking.id],
                             }).then((result) => {
-                            console.log(result)
                             if (result == true){
                                 table.is_show_timer = true
                                 var booking_start_hour = booking.time_slot_id[1].split('-')[0].slice(0, 2);
@@ -44,7 +43,6 @@ odoo.define('sts_pos_booking_system.TableWidget', function(require) {
                                 start_time.setSeconds(0);
                                 var remaining_time = this.env.pos.get_remaining_time(end_time);
                                 $('.timer').text(remaining_time);
-                                console.log(remaining_time);
                             } else {
                                 table.is_show_timer = false;
                             }
