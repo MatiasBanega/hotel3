@@ -53,11 +53,6 @@ class BookingOrder(models.Model):
                                              DEFAULT_SERVER_DATETIME_FORMAT)
             booking_end_time = datetime.strptime(
                     booking_end_time.strftime("%Y-%m-%d %H:%M:%S"), DEFAULT_SERVER_DATETIME_FORMAT)
-            _logger.info("*%r*********booking time**********%r",
-                         datetime.strptime(fields.Datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                           DEFAULT_SERVER_DATETIME_FORMAT),
-                         datetime.strptime(booking_date.strftime("%Y-%m-%d %H:%M:%S"),
-                                           DEFAULT_SERVER_DATETIME_FORMAT))
             if current_time >= booking_start_time and booking.state != 'in_progress':
                 booking.state = 'in_progress'
             if current_time >= booking_end_time:
