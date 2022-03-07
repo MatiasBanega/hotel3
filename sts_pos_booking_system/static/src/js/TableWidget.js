@@ -9,6 +9,7 @@ odoo.define('sts_pos_booking_system.TableWidget', function(require) {
          mounted() {
             super.mounted();
             // call _showRoomTimer once then set interval of 1sec.
+            this.el.style.background = this.env.pos.db.booking_config.not_booked_color
             this._showRoomTimer();
             this.showRoomTimer = setInterval(this._showRoomTimer.bind(this), 1000);
         }
@@ -18,8 +19,10 @@ odoo.define('sts_pos_booking_system.TableWidget', function(require) {
         }
         async _showRoomTimer() {
             const table = this.props.table;
+            const booking_config = this.env.pos.db.booking_config
             this.env.pos.db.pos_all_bookings.forEach((booking) => {
                     if (booking['table_id'] && booking['table_id'][0] == this.props.table['id']){
+                        this.el.style.background = booking_config.booked_color
                         try {
                                 this.rpc({
                                     model: 'booking.order',
@@ -41,10 +44,19 @@ odoo.define('sts_pos_booking_system.TableWidget', function(require) {
                                 start_time.setHours(booking_start_hour);
                                 start_time.setMinutes(booking_start_min);
                                 start_time.setSeconds(0);
+                                var expire_time = end_time
+                                expire_time.setMinutes(end_time.getMinutes() - booking_config.expire_reminder)
                                 var remaining_time = this.env.pos.get_remaining_time(end_time);
+                                console.log(remaining_time);
+                                if (expire_time < new Date()){
+                                    console.log("Expire time")
+                                    this.el.style.background = this.env.pos.db.booking_config.expiring_color
+                                }
                                 $('.timer').text(remaining_time);
+                                //sthis.render();
                             } else {
                                 table.is_show_timer = false;
+                                this.el.style.background = this.env.pos.db.booking_config.not_booked_color
                             }
                             });
                         } catch (error) {
